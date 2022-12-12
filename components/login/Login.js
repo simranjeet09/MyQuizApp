@@ -10,11 +10,9 @@ import {
   ScrollView,
   StatusBar,
   Alert,
-} from "react-native";
-import { SafeAreaView } from 'react-native-safe-area-context';
+} from "react-native";  
+
 import { firebase } from '../config';
-
-
 
 export default function LoginScreen({navigation}) {
 
@@ -81,7 +79,7 @@ export default function LoginScreen({navigation}) {
         </View>
         <View style={styles.Row}>
           <View style={{width: '50%'}}>
-          <TouchableOpacity >
+          <TouchableOpacity onPress={() => navigation.navigate('ForgotPasswordScreen')} >
         <Text style={styles.forgotPassword}>Forgot Password?</Text>
         </TouchableOpacity> 
           </View>

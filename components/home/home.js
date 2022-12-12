@@ -10,61 +10,12 @@ import {
   ScrollView,
   StatusBar,
 } from "react-native";
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
 
 import { firebase } from '../config';
 
-import EasyGameModeScreen from './EasyGameMode';
-import MediumGameMode from './MediumGameMode';
-import HardGameMode from './HardGameMode';
 
-const Stack = createNativeStackNavigator();
-
-export default function Home(){
-
-
-
-  return (
-    <Stack.Navigator 
-    initialRouteName='HomeScreen'
-    screenOptions={{
-      headerShown: false
-    }}
-    >
-      <Stack.Screen name="EasyGameModeScreen"
-       options={{
-        headerShown:true,
-        headerTitle: "",
-        headerBackButtonMenuEnabled: true,
-        headerBackTitle: "",
-        headerShadowVisible: false,
-      }}
-      component={EasyGameModeScreen} />
-       <Stack.Screen name="MediumGameModeScreen" component={MediumGameMode}
-       options={{
-        headerShown:true,
-        headerTitle: "",
-        headerBackButtonMenuEnabled: true,
-        headerBackTitle: "",
-        headerShadowVisible: false,
-      }}/>
-       <Stack.Screen name="HardGameModeScreen" component={HardGameMode}
-       options={{
-        headerShown:true,
-        headerTitle: "",
-        headerBackButtonMenuEnabled: true,
-        headerBackTitle: "",
-        headerShadowVisible: false,
-      }}/>
-      
-      <Stack.Screen name="HomeScreen" component={HomeScreen} />
-    </Stack.Navigator>
-  )
-};
-
-
-function HomeScreen({navigation}) {
+function Home({navigation}) {
 
   function LogOut(){
     firebase.auth().signOut()
@@ -206,3 +157,5 @@ const styles = StyleSheet.create({
   }
  
 });
+
+export default Home;
