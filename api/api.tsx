@@ -1,4 +1,3 @@
-import auth from '@react-native-firebase/auth';
 import { firebase } from '../components/config';
 
 
@@ -15,11 +14,11 @@ export class FirebaseCalls {
 
 
   logout = (): Promise<any> => {
-    return auth()
+    return firebase.auth()
       .signOut()
   };
 
-  userName = (): string => auth().currentUser?.displayName || "";
+  userName = (): string => firebase.auth().currentUser?.email || '';
 
-  email = (): string => auth().currentUser?.email || "";
+  email = (): string => firebase.auth().currentUser?.email || '';
 }

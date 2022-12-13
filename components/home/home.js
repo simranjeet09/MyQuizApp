@@ -1,65 +1,80 @@
 import * as React from 'react';
-import { useState } from 'react';
-import {
+ import {
   StyleSheet,
-  Image,
+
   Text,
   View,
-  TextInput,
+
   TouchableOpacity,
-  ScrollView,
-  StatusBar,
-} from "react-native";
-
-
-import { firebase } from '../config';
+  Alert,
+} from 'react-native';
+import {useBackend} from '../../provider/AppProvider';
 
 
 function Home({navigation}) {
+  const {logout, userName} = useBackend();
 
-  function LogOut(){
-    firebase.auth().signOut()
-    .then(() => {
-      navigation.navigate('LoginScreen');
-    })
-    .catch(error =>{ Alert.alert(error.message)})
+  function LogOut() {
+    logout()
+      .then(() => {
+        navigation.navigate('LoginScreen');
+      })
+      .catch(error => {
+        Alert.alert(error.message);
+      });
   }
 
   return (
     <View style={styles.container}>
-    <View style={styles.ProfileRow}>
-        <View style={{width:'70%',flexDirection:'column',padding: 20,}}>
-            <Text style={styles.Welcometext}>Welcome Back.</Text>
-            <Text style={styles.WelcomeUserText}>User</Text>
+      <View style={styles.ProfileRow}>
+        <View style={{width: '70%', flexDirection: 'column', padding: 20}}>
+          <Text style={styles.Welcometext}>Welcome Back.</Text>
+          <Text style={styles.WelcomeUserText}>{userName}</Text>
         </View>
-        <View style={{width:'30%'}}>
-            <TouchableOpacity style={styles.LogoutButton} onPress={()=>{LogOut()}}>
-                <Text style={styles.LogoutButtonText}>Logout</Text>
-            </TouchableOpacity>
+        <View style={{width: '30%'}}>
+          <TouchableOpacity
+            style={styles.LogoutButton}
+            onPress={() => {
+              LogOut();
+            }}>
+            <Text style={styles.LogoutButtonText}>Logout</Text>
+          </TouchableOpacity>
         </View>
-    </View>
-    <View style={styles.GameButtonsRow}>
+      </View>
+      <View style={styles.GameButtonsRow}>
+        <TouchableOpacity
+          style={styles.EasyGameButton}
+          onPress={() => {
+            navigation.navigate('EasyGameModeScreen');
+          }}>
+          <Text style={styles.GameButtonText}>Start Easy Quiz</Text>
+        </TouchableOpacity>
 
-            <TouchableOpacity style={styles.EasyGameButton} onPress={()=>{ navigation.navigate('EasyGameModeScreen')}}>
-                <Text style={styles.GameButtonText}>Start Easy Quiz</Text>
-            </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.MediumGameButton}
+          onPress={() => {
+            navigation.navigate('MediumGameModeScreen');
+          }}>
+          <Text style={styles.GameButtonText}>Start Medium Quiz</Text>
+        </TouchableOpacity>
 
-            <TouchableOpacity style={styles.MediumGameButton} onPress={()=>{ navigation.navigate('MediumGameModeScreen')}}>
-                <Text style={styles.GameButtonText}>Start Medium Quiz</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.HardGameButton} onPress={()=>{ navigation.navigate('HardGameModeScreen')}}>
-                <Text style={styles.GameButtonText}>Start Hard Quiz</Text>
-            </TouchableOpacity>
-
-    </View>
-    <View style={styles.PreviousGameButtonRow}>
-   
-             <TouchableOpacity style={styles.PreviousGameButton} onPress={()=>{ navigation.navigate('PreviousQuizScore')  }}>
-                <Text style={styles.GameButtonText}>Previous Quiz Score</Text>
-            </TouchableOpacity>
-    
-    </View>
+        <TouchableOpacity
+          style={styles.HardGameButton}
+          onPress={() => {
+            navigation.navigate('HardGameModeScreen');
+          }}>
+          <Text style={styles.GameButtonText}>Start Hard Quiz</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.PreviousGameButtonRow}>
+        <TouchableOpacity
+          style={styles.PreviousGameButton}
+          onPress={() => {
+            navigation.navigate('PreviousQuizScore');
+          }}>
+          <Text style={styles.GameButtonText}>Previous Quiz Score</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -70,7 +85,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: '#FAF7F0',
   },
-  ProfileRow:{
+  ProfileRow: {
     flex: 1,
     flexDirection: 'row',
     backgroundColor: '#FAF7F0',
@@ -78,84 +93,83 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  Welcometext:{
-    textAlign:'left',
+  Welcometext: {
+    textAlign: 'left',
     fontSize: 12,
     color: '#041C32',
   },
-  WelcomeUserText:{
-    textAlign:'left',
+  WelcomeUserText: {
+    textAlign: 'left',
     fontSize: 17,
     fontWeight: '500',
     color: '#041C32',
   },
-  LogoutButton:{
+  LogoutButton: {
     backgroundColor: 'red',
     padding: 10,
     width: '70%',
     borderRadius: 5,
     justifyContent: 'center',
   },
-  EasyGameButton:{
+  EasyGameButton: {
     width: '70%',
     margin: 10,
-    backgroundColor:'#916BBF',
+    backgroundColor: '#916BBF',
     borderRadius: 6,
     justifyContent: 'center',
     padding: 10,
     height: 50,
   },
-  MediumGameButton:{
+  MediumGameButton: {
     width: '70%',
     margin: 10,
-    backgroundColor:'#3D2C8D',
+    backgroundColor: '#3D2C8D',
     borderRadius: 6,
     justifyContent: 'center',
     padding: 10,
     height: 50,
   },
-  HardGameButton:{
+  HardGameButton: {
     width: '70%',
     margin: 10,
-    backgroundColor:'#1C0C5B',
+    backgroundColor: '#1C0C5B',
     borderRadius: 6,
     justifyContent: 'center',
     padding: 10,
     height: 50,
   },
-  PreviousGameButton:{
+  PreviousGameButton: {
     width: '50%',
     margin: 10,
-    backgroundColor:'#FA7D09',
+    backgroundColor: '#FA7D09',
     justifyContent: 'center',
     borderRadius: 6,
     padding: 10,
     height: 40,
-},
-    
-  GameButtonText:{
+  },
+
+  GameButtonText: {
     textAlign: 'center',
     fontSize: 14,
     color: 'white',
   },
-  LogoutButtonText:{
+  LogoutButtonText: {
     textAlign: 'center',
     fontSize: 11,
     fontWeight: '700',
     color: 'white',
   },
-  GameButtonsRow:{
+  GameButtonsRow: {
     flex: 6,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5F5F5',
   },
-  PreviousGameButtonRow:{
+  PreviousGameButtonRow: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  }
- 
+  },
 });
 
 export default Home;

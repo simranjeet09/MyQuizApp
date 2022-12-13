@@ -1,5 +1,5 @@
-import * as React from 'react'
-import {useState} from 'react'
+import * as React from 'react';
+import {useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,42 +8,46 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Alert,
-} from 'react-native'
-import {firebase} from '../config'
-import { useBackend } from '../api/providers/AppProvider';
+} from 'react-native';
+import {firebase} from '../config';
+import {useBackend} from '../../provider/AppProvider';
 
-export default function SignUpScreen ({navigation}) {
-  const [name, setname] = useState('')
-  const [telephone, settelephone] = useState('')
-  const [email, setemail] = useState('')
-  const [password, setpassword] = useState('')
-  const { signUpUser } = useBackend();
+export default function SignUpScreen({navigation}) {
+  const [name, setname] = useState('');
+  const [telephone, settelephone] = useState('');
+  const [email, setemail] = useState('');
+  const [password, setpassword] = useState('');
+  const {signUpUser} = useBackend();
 
+  let registerUser;
   registerUser = async (name, telephone, email, password) => {
-    await  signUpUser(email,password)
+    await signUpUser(email, password)
       .then(() => {
-        Alert.alert('Congratulations!', 'You are registered successfully')
-        navigation.navigate("LoginScreen");
+        Alert.alert('Congratulations!', 'You are registered successfully');
+        navigation.navigate('LoginScreen');
       })
       .catch(error => {
-        Alert.alert(error.message)
+        Alert.alert(error.message);
+      });
+
+    await firebase
+      .firestore()
+      .collection('/users')
+      .add({
+        name,
+        telephone,
+        email,
+        password,
       })
 
-  
-    await firebase.firestore().collection('/users').add({
-      name,
-      telephone,
-      email,
-      password,
-    })
-
-    .then(() => {
-      Alert.alert("User registered successfully!");
-      navigation.navigate('Home');
-    }).catch((error) => {
-      Alert.alert(error.message);
-    })
-  }
+      .then(() => {
+        Alert.alert('User registered successfully!');
+        navigation.navigate('Home');
+      })
+      .catch(error => {
+        Alert.alert(error.message);
+      });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -56,7 +60,7 @@ export default function SignUpScreen ({navigation}) {
             style={styles.input}
             onChangeText={setname}
             value={name}
-            placeholder='Name'
+            placeholder="Name"
             placeholderTextColor={'silver'}
           />
         </View>
@@ -65,7 +69,7 @@ export default function SignUpScreen ({navigation}) {
             style={styles.input}
             onChangeText={settelephone}
             value={telephone}
-            placeholder='Telephone'
+            placeholder="Telephone"
             placeholderTextColor={'silver'}
           />
         </View>
@@ -74,7 +78,7 @@ export default function SignUpScreen ({navigation}) {
             style={styles.input}
             onChangeText={setemail}
             value={email}
-            placeholder='Email'
+            placeholder="Email"
             placeholderTextColor={'silver'}
           />
         </View>
@@ -84,7 +88,7 @@ export default function SignUpScreen ({navigation}) {
             onChangeText={setpassword}
             value={password}
             secureTextEntry={true}
-            placeholder='Password'
+            placeholder="Password"
             placeholderTextColor={'silver'}
           />
         </View>
@@ -92,14 +96,14 @@ export default function SignUpScreen ({navigation}) {
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              registerUser(name, telephone, email, password)
+              registerUser(name, telephone, email, password);
             }}>
             <Text style={{color: 'white', fontSize: 16}}>Sign Up</Text>
           </TouchableOpacity>
         </View>
       </View>
     </SafeAreaView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -151,4 +155,4 @@ const styles = StyleSheet.create({
     right: 5,
     top: 5,
   },
-})
+});
