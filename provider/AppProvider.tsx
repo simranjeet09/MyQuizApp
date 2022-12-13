@@ -1,22 +1,22 @@
 import React, { useContext } from "react"
-import { FirebaseCalls } from "../api"
+import { FirebaseCalls } from "../api/api"
 
-interface BackendCallsInterface {
+interface ApiCallsInterface {
     signIn: (username: string, password: string) => Promise<any>;
     signUpUser:(username: string, password: string) => Promise<any>;
     logout: () => Promise<any>;
     userName: () => string;
-    
+
 }
 
-const BackendContext = React.createContext<BackendCallsInterface>({
+const BackendContext = React.createContext<ApiCallsInterface>({
     signIn: (username: string, password: string) => ({} as Promise<any>),
     signUpUser: (email: string, password: string) => ({} as Promise<any>),
     logout: () => ({} as Promise<any>),
     userName: () => "",
 })
 
-export const useBackend = (): BackendCallsInterface => {
+export const useBackend = (): ApiCallsInterface => {
     return useContext(BackendContext)
 }
 

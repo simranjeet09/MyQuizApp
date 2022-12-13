@@ -1,15 +1,15 @@
 import auth from '@react-native-firebase/auth';
-import { firebase } from '../config';
+import { firebase } from '../components/config';
 
 
 export class FirebaseCalls {
   signIn = async (username: string, password: string): Promise<any> => {
-         
+
     return firebase.auth().signInWithEmailAndPassword(username, password);
   }
 
   signUpUser = async (username: string, password: string): Promise<any> => {
-         
+
     return firebase.auth().createUserWithEmailAndPassword(username, password);
   }
 
