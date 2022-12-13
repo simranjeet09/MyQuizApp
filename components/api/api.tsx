@@ -9,6 +9,11 @@ export class FirebaseCalls {
     return firebase.auth().createUserWithEmailAndPassword(username, password);
   };
 
+  forgotPass = async (username: string): Promise<any> => {
+    return firebase.auth().sendPasswordResetEmail(username);
+  };
+
+
   logout = (): Promise<any> => {
     return firebase.auth().signOut();
   };
