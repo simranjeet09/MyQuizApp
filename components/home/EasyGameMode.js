@@ -12,44 +12,107 @@ import {
 } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { firebase } from '../config';
+
 import GetEasyQuiz from "../api/api";
 
 
 export default function EasyGameMode({ navigation }) {
 
     const [timerCount, setTimer] = useState(5);
+    const [quizscore, setquizscore] = useState(0);
+    const [initializing, setInitializing] = useState(true);
     const [questioncount, setquestioncount] = useState(0);
-    const [show, setshow] = useState(true);
-
+    const [correctanswer, setcorrectanswer] = useState("");
     const [questiontodisplay, setquestiontodisplay] = useState('Your Question will appear here');
     const [displayedquestionanswers, setdisplayedquestionanswers] = useState();
     const [questionbanks,setquestionbanks] = useState();
+    const [answerSelected,setanswerSelected] = useState("");
+    const [arrayOfAnswers, setarrayOfAnswers] = useState([]);
+
+    const [user, setUser] = useState();
+
+    function onAuthStateChanged(user) {
+        setUser(user);
+        if (initializing) setInitializing(false);
+      }
+
+    const MoveToNextQuestion = () => {
+        if (questioncount > 9) {
+            setTimer(-1);
+            const scoreStatement = "Quiz is Over. You Quiz score "+quizscore;
+            alert(scoreStatement);
+            navigation.navigate('Home');
+            setanswerSelected("")
+        } else {
+            setanswerSelected("")
+            setquestioncount(questioncount + 1);
+            setquestiontodisplay(questionbanks[questioncount].question);
+            setcorrectanswer(questionbanks[questioncount].correctAnswer);
+            var x = questionbanks[questioncount].incorrectAnswers;
+            console.log(x);
+            x.push(questionbanks[questioncount].correctAnswer)
+            console.log(x);
+            var shuffledArray = x.sort((a, b) => 0.5 - Math.random());
+            console.log(shuffledArray);
+            setarrayOfAnswers(shuffledArray);
+            console.log(x);
+            setdisplayedquestionanswers(questionbanks[questioncount].answers);
+            setTimer(30);
+        }
+    }
+
+
+    const ButtonPressed = (option) => {
+        console.log("ButtonPressed")
+        if(answerSelected === ""){
+            if(option === correctanswer){
+                setquizscore(quizscore + 1);
+            }
+            console.log("Button Pressed Proceeding...")
+            setanswerSelected(option); 
+            MoveToNextQuestion();
+            
+        }
+    }
 
     if (timerCount == 0) {
         if (questioncount > 9) {
             setTimer(-1);
-            alert('Quiz is over');
-            navigation.navigate('HomeScreen');
+            const scoreStatement = "Quiz is Over. You Quiz score "+quizscore;
+            alert(scoreStatement);
+            navigation.navigate('Home');
         } else {
             setquestioncount(questioncount + 1);
             setquestiontodisplay(questionbanks[questioncount].question);
+            setcorrectanswer(questionbanks[questioncount].correctAnswer);
+            var x = questionbanks[questioncount].incorrectAnswers;
+            console.log(x);
+            x.push(questionbanks[questioncount].correctAnswer)
+            console.log(x);
+            var shuffledArray = x.sort((a, b) => 0.5 - Math.random());
+            console.log(shuffledArray);
+            setarrayOfAnswers(shuffledArray);
+            console.log(x);
             setdisplayedquestionanswers(questionbanks[questioncount].answers);
             setTimer(30);
-            let interval = setInterval(() => {
-                setTimer(lastTimerCount => {
+            let interval = setInterval(async() => {
+                await setTimer(lastTimerCount => {
                     lastTimerCount <= 1 && clearInterval(interval)
                     return lastTimerCount - 1
                 })
             }, 1000)
-            return () => clearInterval(interval)
         }
     };
 
     useEffect(() => {
+        if (firebase.auth().currentUser !== null) 
+        console.log("user id: " + firebase.auth().currentUser.uid);
+        const subscriber = firebase.auth().onAuthStateChanged(onAuthStateChanged);
         async function myfun() {
             try {
                 const response = await fetch(
-                  'https://quizapi.io/api/v1/questions?apiKey=6M4lbRBLzZbcub4zUHOPsHjXl1kV3K2N3V82fvZF&category=code&difficulty=easy&limit=10'
+                  'https://the-trivia-api.com/api/questions?categories=science&limit=10&region=CA&difficulty=easy'
                 );
                 const json = await response.json();
                 setquestionbanks(json);
@@ -65,9 +128,7 @@ export default function EasyGameMode({ navigation }) {
                 lastTimerCount <= 1 && clearInterval(interval)
                 return lastTimerCount - 1
             })
-        }, 1000) //each count lasts for a second
-        //cleanup the interval on complete
-        return () => clearInterval(interval)
+        }, 1000)
     }, []);
 
     return (
@@ -92,20 +153,20 @@ export default function EasyGameMode({ navigation }) {
 
                         <View>
 
-                            <TouchableOpacity style={styles.QuizQuestionAnswerOptionButton}>
-                                <Text style={styles.QuizQuestionAnswerOptionButtonText}>{displayedquestionanswers["answer_a"]}</Text>
+                            <TouchableOpacity style={styles.QuizQuestionAnswerOptionButton} onPress={()=>{ButtonPressed(arrayOfAnswers[0])}}>
+                                <Text style={styles.QuizQuestionAnswerOptionButtonText}>{arrayOfAnswers[0]}</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={styles.QuizQuestionAnswerOptionButton}>
-                                <Text style={styles.QuizQuestionAnswerOptionButtonText}>{displayedquestionanswers["answer_b"]}</Text>
+                            <TouchableOpacity style={styles.QuizQuestionAnswerOptionButton} onPress={()=>{ButtonPressed(arrayOfAnswers[1])}}>
+                                <Text style={styles.QuizQuestionAnswerOptionButtonText}>{arrayOfAnswers[1]}</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={styles.QuizQuestionAnswerOptionButton}>
-                                <Text style={styles.QuizQuestionAnswerOptionButtonText}>{displayedquestionanswers["answer_c"]}</Text>
+                            <TouchableOpacity style={styles.QuizQuestionAnswerOptionButton} onPress={()=>{ButtonPressed(arrayOfAnswers[2])}}>
+                                <Text style={styles.QuizQuestionAnswerOptionButtonText}>{arrayOfAnswers[2]}</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={styles.QuizQuestionAnswerOptionButton}>
-                                <Text style={styles.QuizQuestionAnswerOptionButtonText}>{displayedquestionanswers["answer_d"]}</Text>
+                            <TouchableOpacity style={styles.QuizQuestionAnswerOptionButton} onPress={()=>{ButtonPressed(arrayOfAnswers[3])}}>
+                                <Text style={styles.QuizQuestionAnswerOptionButtonText}>{arrayOfAnswers[3]}</Text>
                             </TouchableOpacity>
 
 

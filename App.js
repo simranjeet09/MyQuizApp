@@ -11,6 +11,7 @@ import HardGameMode from './components/home/HardGameMode';
 import LoginScreen from './components/login/Login';
 import SignUpScreen from './components/register/Register';
 import Home from './components/home/home';
+import BackendProvider from './components/api/providers/AppProvider';
 
 const Stack = createNativeStackNavigator();
 
@@ -37,7 +38,8 @@ function App() {
   }
 
   return (
-    <NavigationContainer>
+    <BackendProvider>
+ <NavigationContainer>
       <Stack.Navigator
         initialRouteName={user ? 'LoginScreen' : 'Home'}
         screenOptions={{
@@ -94,6 +96,8 @@ function App() {
 
       </Stack.Navigator>
     </NavigationContainer>
+    </BackendProvider>
+   
   );
 }
 

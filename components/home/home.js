@@ -55,7 +55,7 @@ function Home({navigation}) {
     </View>
     <View style={styles.PreviousGameButtonRow}>
    
-             <TouchableOpacity style={styles.PreviousGameButton}>
+             <TouchableOpacity style={styles.PreviousGameButton} onPress={()=>{ navigation.navigate('PreviousQuizScore')  }}>
                 <Text style={styles.GameButtonText}>Previous Quiz Score</Text>
             </TouchableOpacity>
     
