@@ -9,8 +9,10 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
-} from "react-native";
-import { useBackend } from '../../provider/AppProvider';
+} from "react-native";  
+import { useBackend } from '../api/providers/AppProvider';
+
+import { firebase } from '../config';
 
 export default function LoginScreen({navigation}) {
 
@@ -19,7 +21,7 @@ export default function LoginScreen({navigation}) {
 
   const { signIn } = useBackend();
 
-
+  
  const  LoginIn = async(username,password) => {
 
     if(username == "" && password == ""){
@@ -45,7 +47,7 @@ export default function LoginScreen({navigation}) {
         <Text style={styles.titleText}>Welcome back! 🎉</Text>
       </View>
       <View style={styles.Rows}>
-      <ScrollView
+      <ScrollView 
       vertical={true}
       showsVerticalScrollIndicator={true}
       >
@@ -77,7 +79,7 @@ export default function LoginScreen({navigation}) {
           <View style={{width: '50%'}}>
           <TouchableOpacity onPress={() => navigation.navigate('ForgotPasswordScreen')} >
         <Text style={styles.forgotPassword}>Forgot Password?</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> 
           </View>
           <View style={{width: '50%'}}>
           <TouchableOpacity  onPress={() => navigation.navigate('SignUpScreen')} >
@@ -119,13 +121,13 @@ const styles = StyleSheet.create({
     marginTop: 5,
     flexDirection: "column",
   },
-  Row: {
+  Row: { 
     width: '100%',
     height: '10%',
     flexDirection: 'row',
     marginTop: 25,
   },
-
+ 
   input: {
     height: 38,
     borderWidth: 1,

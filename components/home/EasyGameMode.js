@@ -14,7 +14,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { firebase } from '../config';
 
-import GetEasyQuiz from "../../api/api";
+import GetEasyQuiz from "../api/api";
 
 
 export default function EasyGameMode({ navigation }) {
@@ -70,9 +70,9 @@ export default function EasyGameMode({ navigation }) {
                 setquizscore(quizscore + 1);
             }
             console.log("Button Pressed Proceeding...")
-            setanswerSelected(option);
+            setanswerSelected(option); 
             MoveToNextQuestion();
-
+            
         }
     }
 
@@ -106,7 +106,7 @@ export default function EasyGameMode({ navigation }) {
     };
 
     useEffect(() => {
-        if (firebase.auth().currentUser !== null)
+        if (firebase.auth().currentUser !== null) 
         console.log("user id: " + firebase.auth().currentUser.uid);
         const subscriber = firebase.auth().onAuthStateChanged(onAuthStateChanged);
         async function myfun() {

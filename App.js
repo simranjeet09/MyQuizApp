@@ -11,7 +11,7 @@ import HardGameMode from './components/home/HardGameMode';
 import LoginScreen from './components/login/Login';
 import SignUpScreen from './components/register/Register';
 import Home from './components/home/home';
-import BackendProvider from './provider/AppProvider';
+import BackendProvider from './components/api/providers/AppProvider';
 
 const Stack = createNativeStackNavigator();
 
@@ -97,7 +97,7 @@ function App() {
       </Stack.Navigator>
     </NavigationContainer>
     </BackendProvider>
-
+   
   );
 }
 

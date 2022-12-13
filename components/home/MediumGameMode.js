@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import GetEasyQuiz from "../../api/api";
+import GetEasyQuiz from "../api/api";
 
 
 export default function MediumGameMode({ navigation }) {
@@ -60,9 +60,9 @@ export default function MediumGameMode({ navigation }) {
                 setquizscore(quizscore + 1);
             }
             console.log("Button Pressed Proceeding...")
-            setanswerSelected(option);
+            setanswerSelected(option); 
             MoveToNextQuestion();
-
+            
         }
     }
 

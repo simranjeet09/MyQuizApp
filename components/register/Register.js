@@ -10,7 +10,7 @@ import {
   Alert,
 } from 'react-native'
 import {firebase} from '../config'
-import { useBackend } from '../../provider/AppProvider';
+import { useBackend } from '../api/providers/AppProvider';
 
 export default function SignUpScreen ({navigation}) {
   const [name, setname] = useState('')
@@ -29,7 +29,7 @@ export default function SignUpScreen ({navigation}) {
         Alert.alert(error.message)
       })
 
-
+  
     await firebase.firestore().collection('/users').add({
       name,
       telephone,
